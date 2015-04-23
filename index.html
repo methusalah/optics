@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>sootballs</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="foundation/geometry/point2d.js"></script>
+        <script src="foundation/geometry/line2d.js"></script>
+        <script src="foundation/geometry/polyline2d.js"></script>
+        <script src="foundation/geometry/circle.js"></script>
+        <script src="foundation/geometry/transform2d.js"></script>
+        <script src="foundation/geometry/intersector.js"></script>
+        <script src="foundation/math/angle.js"></script>
+        <script src="drawer.js"></script>
+        <script src="presets.js"></script>
+        <script src="model/item.js"></script>
+        <script src="model/lightray.js"></script>
+        <script src="model/lightmap.js"></script>
+        <script src="model/model.js"></script>
+    </head>
+    <body>
+        <div class="mainpanel">
+            <h1>OPTICAL ENGINE</h1>
+            <div class="optionspanel">
+                <h2>options</h2>
+                max rays <input type="number" class="input_maxrays" min="1" max="5000" value="5000" step="10"><br/>
+            </div>
+            <br/>
+            <div class="confpanel surfacepanel">
+                <h2>Surfaces' behavior</h2>
+                <button class="bt_outside" onclick="setOutside()">oustide</button>
+                <button class="bt_inside" onclick="setInside()">inside</button>
+                <hr/>
+                <div title="Specular reflexion">
+                    <div class="field">
+                        <img src="graphics/icon_specular.png">
+                        <input type="number" class="in_specular" min="0" max="1" value="0" step="0.1">
+                    </div>
+                    <div class="cursor">
+                        <input type="range" class="ran_specular" min="0" max="1" value="0" step="0.01"/>
+                    </div>
+                </div>
+                <hr/>
+                <div title="Diffuse reflexion">
+                    <div class="field">
+                        <img src="graphics/icon_diffusion.png">
+                        <input type="number" class="in_diffusion" min="0" max="1" value="0" step="0.1">
+                    </div>
+                    <div class="cursor">
+                        <input type="range" class="ran_diffusion" min="0" max="1" value="0" step="0.01"/>
+                    </div>
+                </div>
+                <hr/>
+                <div title="Refraction">
+                    <div class="field">
+                        <img src="graphics/icon_refraction.png">
+                        <input type="number" class="in_refraction" min="0" max="1" value="0" step="0.1">
+                    </div>
+                    <div class="cursor">
+                        <input type="range" class="ran_refraction" min="0" max="1" value="0" step="0.01"/>
+                    </div>
+                </div>
+                <div class="inside_refraction_cursors">
+                    <div class="cursor2" title="Minimum refraction index">
+                        <label>min : </label><input type="range" class="in_minRef" min="1" max="2" value="1" step="0.1"><br/>
+                    </div>
+                    <div class="cursor2" title="Maximum refraction index">
+                        <label>max : </label><input type="range" class="in_maxRef" min="1" max="2" value="1" step="0.1"><br/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="confpanel lightpanel">
+                <h2>light configuration</h2>
+                <div title="Arc of projection">
+                    <div class="field">
+                        <img src="graphics/icon_arc.png">
+                        <input type="number" class="in_arc" min="0.1" max="360" value="0.1" step="5">
+                    </div>
+                    <div class="cursor">
+                        <input type="range" class="ran_arc" min="0.1" max="360" value="0.1" step="0.01"/>
+                    </div>
+                </div>
+                <div title="Size of the light source">
+                    <div class="field">
+                        <img src="graphics/icon_arc.png">
+                        <input type="number" class="in_size" min="1" max="600" value="1" step="10">
+                    </div>
+                    <div class="cursor">
+                        <input type="range" class="ran_size" min="1" max="600" value="1" step="1"/>
+                    </div>
+                </div>
+            </div>
+
+
+            <br/>
+            <div class="presetspanel">
+                <h2>presets</h2>
+                <button class="pointlight">Point Light</button><br>
+                <button class="mirror">Mirror</button><br>
+                <button class="curvedmirror">Curved Mirror</button><br>
+                <button class="wall">Wall</button><br>
+                <button class="prism">Prism</button><br>
+                <button class="raindrop">Raindrop</button><br>
+                <button class="metalring">Metal ring</button><br>
+            </div>
+
+
+        </div>
+        <canvas id="maincanvas">canvas can't be drawn</canvas>
+        <script>
+
+setInside = function(){
+    model.surface = "inside";
+    updateGUI();
+}
+setOutside = function(){
+    model.surface = "outside";
+    updateGUI();
+}
+setOutside();
+
+
+var fitCanvasToWindow = function() {
+    var canvas = document.getElementById("maincanvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+var ctx;
+var canvas;
+var img;
+window.onload = function()
+{
+    canvas = document.getElementById("maincanvas");
+    ctx = canvas.getContext('2d');
+    img = ctx.createImageData(800, 800);
+    redraw();
+
+    /* Event listeners
+    */
+    addEventListener('mousemove', onMouseMove, false);
+    addEventListener('mousedown', onMousePressed, false);
+    addEventListener('mouseup', onMouseReleased, false);
+    canvas.addEventListener('contextmenu', function(e){
+        e.preventDefault();
+    }, false);
+
+
+
+    model.clearLight();
+    model.tick();
+    redraw();
+}
+
+
+$(function() {
+    fitCanvasToWindow();
+    $(window).resize(function(){
+        fitCanvasToWindow();
+    })
+
+    $('.input_maxrays').change(function(e) {
+        model.maxRays = parseInt(e.currentTarget.value);
+        model.clearLight();
+    })
+
+
+    /* Number inputs
+    */
+    $('.in_arc, .in_size').on("change", function(e) {
+        var s = model.selected;
+        s.arc = parseFloat($(".in_arc").val());
+        s.size = parseFloat($(".in_size").val());
+        model.clearLight();
+        updateGUI();
+    })
+    $(".in_specular, .in_diffusion, .in_refraction, .in_minRef, .in_maxRef").on("change", function(e) {
+        var s = model.getCurrentSurface();
+        s.spec = parseFloat($(".in_specular").val());
+        s.diff = parseFloat($(".in_diffusion").val());
+        s.ref = parseFloat($(".in_refraction").val());
+        s.minRef = parseFloat($(".in_minRef").val());
+        s.maxRef = parseFloat($(".in_maxRef").val());
+        model.clearLight();
+        updateGUI();
+    })
+
+    /* range cursors
+    */
+    $(".ran_arc, .ran_size").on("change input", function(e) {
+        var s = model.selected;
+        s.arc = parseFloat($(".ran_arc").val());
+        s.size = parseFloat($(".ran_size").val());
+        model.clearLight();
+        updateGUI();
+    })
+    $(".ran_specular, .ran_diffusion, .ran_refraction, .ran_minRef, .ran_maxRef").on("change input", function(e) {
+        var s = model.getCurrentSurface();
+        s.spec = parseFloat($(".ran_specular").val());
+        s.diff = parseFloat($(".ran_diffusion").val());
+        s.ref = parseFloat($(".ran_refraction").val());
+        s.minRef = parseFloat($(".in_minRef").val());
+        s.maxRef = parseFloat($(".in_maxRef").val());
+        model.clearLight();
+        updateGUI();
+    })
+
+
+
+
+    $(".pointlight").click(function() {
+        createPointLight();
+    })
+    $('.mirror').click(function() {
+        createMirror();
+    })
+    $('.curvedmirror').click(function() {
+        createCurvedMirror();
+    })
+    $('.wall').click(function() {
+        createWall();
+    })
+    $('.prism').click(function() {
+        createPrism();
+    })
+    $('.raindrop').click(function() {
+        createRaindrop();
+    })
+    $('.metalring').click(function() {
+        createBox();
+    })
+
+})
+
+/* Input Control
+*/
+function getMousePos(e) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+}
+
+function onMouseMove(e) {
+    var mousePos = getMousePos(e);
+    var coord = new Point2D(mousePos.x, mousePos.y);
+    model.aim(coord);
+};
+
+function onMousePressed(e){
+    model.pressed(e.button);
+};
+
+function onMouseReleased(e){
+    model.released(e.button);
+};
+        </script>
+
+    </body>
+</html>

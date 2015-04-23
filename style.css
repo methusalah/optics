@@ -1,0 +1,105 @@
+body {
+	background-color: black;
+	margin:0; padding:0;
+}
+canvas { 
+	display:block;
+}
+div.mainpanel {
+	background:rgba(50,50,50,0.5);
+	font-family: Arial;
+	position:absolute;
+	right:0;
+	width:200px;
+	height: 100%;
+	text-shadow: 1px 1px 1px rgba(50, 50, 50, 1);
+	text-align: center;
+	color:#ccc;
+}
+div.mainpanel div {
+	background:rgba(50,50,80,0.8);
+    border-radius: 10px;
+    border: 2px solid #cccccc;
+    padding: 6px; 
+}
+
+div.mainpanel h1 {
+    display: block;
+    font-size: 1.2em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+}
+div.mainpanel h2 {
+	text-align: center;
+    display: block;
+    font-size: 1em;
+    margin-top: 0.1em;
+    margin-bottom: 0.4em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+div.mainpanel h3 {
+	text-align: left;
+    display: block;
+    font-size: 1em;
+    margin-top: 0.1em;
+    margin-bottom: 0.4em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+
+div.mainpanel
+
+div.optionspanel {
+}
+
+
+/* SURFACE CONFIGURATOR
+*/
+
+div.confpanel {
+    text-align: left;
+}
+div.confpanel hr {
+    border: 1px solid #555555;
+    width: 75%;
+}
+div.confpanel div {
+    background:rgba(0,0,0,0);
+    display: block;
+    width: 100%;
+    border: 0px solid #cccccc;
+    padding: 0;
+}
+div.confpanel div.field {
+    height: 40px;
+}
+div.field input {
+    float: right;
+    width : *;
+}
+div.confpanel div.cursor {
+    height: 30px;
+}
+div.cursor input {
+    height: 100%;
+    width : 100%;
+}
+
+
+
+
+
+div.presetspanel {
+	text-align: center;
+}
+div.presetspanel button {
+    margin-left: auto;
+    margin-right: auto;
+	width:75%;
+}
