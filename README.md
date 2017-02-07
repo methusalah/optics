@@ -1,8 +1,28 @@
-# optics
-An optical simulator in browser
-![please report broken links](https://drive.google.com/open?id=0B5eqGfcLKWa-ajYtbDFPYmo3VDA)
+![please report broken links](https://s28.postimg.org/od00tiezh/bandeau.jpg)
 
 **<a href="https://twitter.com/dumas181" target="_blank">Follow me on twitter !</a>**
 
 # optics
-An optical simulator in browser
+Optics is a 2D geometric optical simulator running in browser, written in javascript. It creates colorful and realistic pictures of light rays traveling throw various medium.
+
+Just place and tweak a light source and some items to create a scene.
+
+Try it and share it !
+
+## available features
+* reflective surfaces
+* wavelength-dependent refractive surfaces
+* diffusing surface
+* more to come?
+
+## missing features
+* better drawing engine for smoother result
+* GPU utilisation for better performance and realtime previewing
+* more items to place
+* scene save as URL
+* more user-friendly interface
+
+## contribution
+Optics uses only JQuery as dependency. You can use this software and its source-code in any way you like. Contributions and credits are very welcome.
+
+Let's stay in touch **<a href="https://twitter.com/dumas181" target="_blank">via my twitter !</a>**
