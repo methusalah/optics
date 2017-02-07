@@ -8,9 +8,12 @@
 # optics
 Optics is a 2D geometric optical simulator running in browser, written in javascript. It creates colorful and realistic pictures of light rays traveling throw various medium.
 
-Just place and tweak a light source and some items to create a scene.
-
 Try it and share it !
+
+## how to create a scene
+ - [x] place and tweak a light source and some items by clicking on presets.
+ - [x] maintain right clic on an item to rotate it, left clic to move it.
+ - [x] don't forget to change the max ray number to get smoother rendering over time.
 
 ## available features
 * reflective surfaces
