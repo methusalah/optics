@@ -2,6 +2,9 @@
 
 **<a href="https://twitter.com/dumas181" target="_blank">Follow me on twitter !</a>**
 
+| **<a href="http://methusalah.github.io/optics/" target="_blank">RUN OPTICS</a>**
+---
+
 # optics
 Optics is a 2D geometric optical simulator running in browser, written in javascript. It creates colorful and realistic pictures of light rays traveling throw various medium.
 
