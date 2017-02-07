@@ -26,3 +26,9 @@ Try it and share it !
 Optics uses only JQuery as dependency. You can use this software and its source-code in any way you like. Contributions and credits are very welcome.
 
 Let's stay in touch **<a href="https://twitter.com/dumas181" target="_blank">via my twitter !</a>**
+
+> Why is the sky blue?
+![please report broken links](https://s27.postimg.org/dij0yzbtv/js07.jpg)
+
+> Indirect lighting simulation
+![please report broken links](https://s23.postimg.org/jg4mh33dn/js08.jpg)
